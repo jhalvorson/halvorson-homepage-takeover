@@ -21,7 +21,7 @@ function halvorson_homepage_takeover_assets() {
 
 add_action('wp_head', 'halvorson_homepage_takeover');
 function halvorson_homepage_takeover() {
-	if( is_home() ) {
+	if( is_front_page() ) {
 		echo ' <div class="takeover-modal"><a href="'. esc_attr( get_option('modal_url') ) .'"><img src="'. esc_attr( get_option('modal_image') ) .'"></a></div>';
 	}
 }
@@ -36,8 +36,7 @@ function halvorson_homepage_takeover_settings_page() { ?>
 
 	<div class="wrap">
 
-		<div id="icon-options-general" class="icon32"></div>
-		<h1><?php esc_attr_e( 'Homepage Takeover', 'wp_admin_style' ); ?></h1>
+		<h1><?php esc_attr_e( 'Homepage Takeover', 'halvorson_homepage_takeover' ); ?></h1>
 
 		<div id="poststuff">
 
@@ -89,32 +88,38 @@ function halvorson_homepage_takeover_settings_page() { ?>
 
 						<table class="widefat">
 							<tr>
-								<th class="row-title"><?php esc_attr_e( 'Development Plan', 'wp_admin_style' ); ?></th>
-								<th><?php esc_attr_e( 'Release Number', 'wp_admin_style' ); ?></th>
+								<th class="row-title"><?php esc_attr_e( 'Development Plan', 'halvorson_homepage_takeover' ); ?></th>
+								<th><?php esc_attr_e( 'Release Number', 'halvorson_homepage_takeover' ); ?></th>
 							</tr>
 							<tr>
 								<td class="row-title"><label for="tablecell"><?php esc_attr_e(
-											'Add option to open in new tab', 'wp_admin_style'
+											'Add option to open in new tab', 'halvorson_homepage_takeover'
 										); ?></label></td>
-								<td><?php esc_attr_e( '0.2', 'wp_admin_style' ); ?></td>
+								<td><?php esc_attr_e( '0.2', 'halvorson_homepage_takeover' ); ?></td>
 							</tr>
 							<tr class="alternate">
 								<td class="row-title"><label for="tablecell"><?php esc_attr_e(
-											'Add drag and drop image selector', 'wp_admin_style'
+											'Allow admin to control delay', 'halvorson_homepage_takeover'
 										); ?></label></td>
-								<td><?php esc_attr_e( '0.2', 'wp_admin_style' ); ?></td>
+								<td><?php esc_attr_e( '0.2', 'halvorson_homepage_takeover' ); ?></td>
 							</tr>
 							<tr>
 								<td class="row-title"><label for="tablecell"><?php esc_attr_e(
-											'Add option to either upload an image or use text', 'wp_admin_style'
+											'Add drag and drop image selector', 'halvorson_homepage_takeover'
 										); ?></label></td>
-								<td><?php esc_attr_e( '0.3', 'wp_admin_style' ); ?></td>
+								<td><?php esc_attr_e( '0.2', 'halvorson_homepage_takeover' ); ?></td>
 							</tr>
 							<tr class="alternate">
 								<td class="row-title"><label for="tablecell"><?php esc_attr_e(
-											'Add feedback form', 'wp_admin_style'
+											'Add option to either upload an image or use text', 'halvorson_homepage_takeover'
 										); ?></label></td>
-								<td><?php esc_attr_e( '0.4', 'wp_admin_style' ); ?></td>
+								<td><?php esc_attr_e( '0.3', 'halvorson_homepage_takeover' ); ?></td>
+							</tr>
+							<tr>
+								<td class="row-title"><label for="tablecell"><?php esc_attr_e(
+											'Add feedback form', 'halvorson_homepage_takeover'
+										); ?></label></td>
+								<td><?php esc_attr_e( '0.4', 'halvorson_homepage_takeover' ); ?></td>
 							</tr>
 						</table>
 
@@ -132,21 +137,21 @@ function halvorson_homepage_takeover_settings_page() { ?>
 						<div class="postbox">
 
 							<h2><span><?php esc_attr_e(
-										'About Homepage Takeover', 'wp_admin_style'
+										'About Homepage Takeover', 'halvorson_homepage_takeover'
 									); ?></span></h2>
 
 							<div class="inside">
 								<p><?php esc_attr_e(
 										'This plugin has been developed for Scottish Golf by Halvorson Digital. We look to open source this plugin in the future so your feedback would be greatly appreciated.',
-										'wp_admin_style'
+										'halvorson_homepage_takeover'
 									); ?></p>
 								<p><?php esc_attr_e(
 										'Please do note that this plugin is in BETA. Do not use beyond Scottish Golf.',
-										'wp_admin_style'
+										'halvorson_homepage_takeover'
 									); ?></p>
 								<p><?php esc_attr_e(
 										'&copy; Copyright Jamie Halvorson',
-										'wp_admin_style'
+										'halvorson_homepage_takeover'
 									); ?></p>
 							</div>
 							<!-- .inside -->
