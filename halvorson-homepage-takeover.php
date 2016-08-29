@@ -115,12 +115,19 @@ function halvorson_homepage_takeover_settings_page() { ?>
 										); ?></label></td>
 								<td><?php esc_attr_e( '0.3', 'halvorson_homepage_takeover' ); ?></td>
 							</tr>
-							<tr>
+							<tr >
+								<td class="row-title"><label for="tablecell"><?php esc_attr_e(
+											'Allow users to activate and deactivate via settings page'
+										); ?></label></td>
+								<td><?php esc_attr_e( '0.3', 'halvorson_homepage_takeover' ); ?></td>
+							</tr>
+							<tr class="alternate">
 								<td class="row-title"><label for="tablecell"><?php esc_attr_e(
 											'Add feedback form', 'halvorson_homepage_takeover'
 										); ?></label></td>
 								<td><?php esc_attr_e( '0.4', 'halvorson_homepage_takeover' ); ?></td>
 							</tr>
+
 						</table>
 
 					</div>
