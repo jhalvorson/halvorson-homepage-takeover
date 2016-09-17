@@ -1,12 +1,12 @@
 <?php
 
 /*
-Plugin Name: Halvorson Homepage Takeover
-Plugin URI: http://halvorson.digital
+Plugin Name: Homepage Takeover
+Plugin URI: http://halvorson.co.uk/plugins
 Description: Display a simple modal popup on your homepage
 Version: 0.1
-Author: Halvorson Digital
-Author URI: http://halvorson.digital
+Author: Jamie Halvorson
+Author URI: http://halvorson.co.uk
 License: GPL2
 */
 
@@ -22,7 +22,48 @@ function halvorson_homepage_takeover_assets() {
 add_action('wp_head', 'halvorson_homepage_takeover');
 function halvorson_homepage_takeover() {
 	if( is_front_page() ) {
-		echo ' <div class="takeover-modal"><a href="'. esc_attr( get_option('modal_url') ) .'"><img src="'. esc_attr( get_option('modal_image') ) .'"></a></div>';
+
+		//Check if we are to open in new tab
+		if(esc_attr( get_option('open_in_new_tab') ) == '1'){
+			$newTab = '_blank';
+		} else {
+			$newTab = '_self';
+		}
+
+		if(esc_attr( get_option('deactivate_cookies') ) == '1'){
+			echo '<script type="text/javascript">
+			 jQuery(window).load(function(){
+			     setTimeout(function(){
+			         jQuery(".takeover-modal").modal({
+			             fadeDuration: 100
+			         });
+			     }, 3000);
+			 });
+			 </script>';
+		} else {
+			echo '<script type="text/javascript">
+						 jQuery(document).ready(function() {
+					        if (Cookies.get(\'modal_shown\') == null) {
+					             Cookies.set(\'modal_shown\', \'yes\', { expires: 3, path: \'/\' });
+					             setTimeout(function(){
+					                 jQuery(".takeover-modal").modal({
+					                     fadeDuration: 100
+					                 });						             
+					                 }, 3000);
+						         }
+						     });
+				</script>';
+		}
+
+		if(esc_attr( get_option('deactivate_homepage_takeover') ) == '1'){
+			null;
+		} else {
+			echo '<div class="takeover-modal">
+ 					<a target="'. $newTab .'" href="'. esc_attr( get_option('modal_url') ) .'"><img src="'. esc_attr( get_option('modal_image') ) .'"></a>
+ 		    </div>';
+
+		}
+
 	}
 }
 
@@ -54,11 +95,12 @@ function halvorson_homepage_takeover_settings_page() { ?>
 								<form method="post" action="options.php">
 									<?php settings_fields( 'halvorson-homepage-takeover-settings-group' ); ?>
 									<?php do_settings_sections( 'halvorson-homepage-takeover-settings-group' ); ?>
+
 									<table class="form-table">
 										<tr valign="top">
 											<th scope="row">Modal URL</th>
 											<td>
-												<input type="url" name="modal_url" class="regular-text" value="<?php echo esc_attr( get_option('modal_url') ); ?>"/><br>
+												<input type="url" name="modal_url" class="regular-text" value="<?php echo esc_url( get_option('modal_url') ); ?>"/><br>
 											</td>
 										</tr>
 
@@ -66,8 +108,62 @@ function halvorson_homepage_takeover_settings_page() { ?>
 											<th scope="row">Modal Background Image</th>
 											<td><input type="text" name="modal_image" class="regular-text" value="<?php echo esc_attr( get_option('modal_image') ); ?>" /></td>
 										</tr>
-										
+
 									</table>
+
+									<hr />
+
+									<h2 class="h2"><?php esc_attr_e( 'Options', 'halvorson_homepage_takeover' ); ?></h2>
+
+									<table class="form-table">
+										<tr valign="top">
+											<th scope="row">Open in a new tab<br>
+											<p class="description"><?php esc_attr_e('Would you like the link to open in a new tab? If not, then leave the box unchecked', 'halvorson_homepage_takeover');?></p>
+											</th>
+											<td>
+												<fieldset>
+													<legend class="screen-reader-text"><span>Open in new tab?</span></legend>
+													<label for="open_in_new_tab">
+														<?php $options =  get_option( 'open_in_new_tab'); ?>
+														<input name="open_in_new_tab" type="checkbox" id="open_in_new_tab" value="1" <?php checked( 1, get_option( 'open_in_new_tab'), true ); ?> />
+														<span><?php esc_attr_e( 'Open in new tab', 'halvorson_homepage_takeover' ); ?></span>
+													</label>
+												</fieldset>
+											</td>
+										</tr>
+
+										<tr valign="top">
+											<th scope="row">Deactivate Cookies?<br>
+												<p class="description"><?php esc_attr_e('Check this box to deactivate cookies', 'halvorson_homepage_takeover');?></p>
+											</th>
+											<td>
+												<fieldset>
+													<legend class="screen-reader-text"><span>Open in new tab?</span></legend>
+													<label for="deactivate_cookies">
+														<input name="deactivate_cookies" type="checkbox" id="deactivate_cookies" value="1" <?php checked( 1, get_option( 'deactivate_cookies'), true ); ?> />
+														<span><?php esc_attr_e( 'Deactivate Cookies', 'halvorson_homepage_takeover' ); ?></span>
+													</label>
+												</fieldset>
+											</td>
+										</tr>
+
+										<tr valign="top">
+											<th scope="row">Deactivate Homepage Takeover?<br>
+											<p class="description"><?php esc_attr_e( 'Would you like to deactivate Homepage Takeover?', 'halvorson_homepage_takeover' ); ?></p>
+											</th>
+											<td>
+												<fieldset>
+													<legend class="screen-reader-text"><span>Deactivate Modal</span></legend>
+													<label for="deactivate_homepage_takeover">
+														<input name="deactivate_homepage_takeover" type="checkbox" id="deactivate_homepage_takeover" value="1" <?php checked( 1, get_option( 'deactivate_homepage_takeover'), true ); ?> />
+														<span><?php esc_attr_e( 'Deactivate Modal', 'halvorson_homepage_takeover' ); ?></span>
+													</label>
+												</fieldset>
+											</td>
+										</tr>
+									</table>
+
+
 
 									<?php submit_button(); ?>
 
@@ -78,57 +174,6 @@ function halvorson_homepage_takeover_settings_page() { ?>
 
 						</div>
 						<!-- .postbox -->
-
-					</div>
-					<!-- .meta-box-sortables .ui-sortable -->
-
-
-
-					<div class="meta-box-sortables ui-sortable">
-
-						<table class="widefat">
-							<tr>
-								<th class="row-title"><?php esc_attr_e( 'Development Plan', 'halvorson_homepage_takeover' ); ?></th>
-								<th><?php esc_attr_e( 'Release Number', 'halvorson_homepage_takeover' ); ?></th>
-							</tr>
-							<tr>
-								<td class="row-title"><label for="tablecell"><?php esc_attr_e(
-											'Add option to open in new tab', 'halvorson_homepage_takeover'
-										); ?></label></td>
-								<td><?php esc_attr_e( '0.2', 'halvorson_homepage_takeover' ); ?></td>
-							</tr>
-							<tr class="alternate">
-								<td class="row-title"><label for="tablecell"><?php esc_attr_e(
-											'Allow admin to control delay', 'halvorson_homepage_takeover'
-										); ?></label></td>
-								<td><?php esc_attr_e( '0.2', 'halvorson_homepage_takeover' ); ?></td>
-							</tr>
-							<tr>
-								<td class="row-title"><label for="tablecell"><?php esc_attr_e(
-											'Add drag and drop image selector', 'halvorson_homepage_takeover'
-										); ?></label></td>
-								<td><?php esc_attr_e( '0.2', 'halvorson_homepage_takeover' ); ?></td>
-							</tr>
-							<tr class="alternate">
-								<td class="row-title"><label for="tablecell"><?php esc_attr_e(
-											'Add option to either upload an image or use text', 'halvorson_homepage_takeover'
-										); ?></label></td>
-								<td><?php esc_attr_e( '0.3', 'halvorson_homepage_takeover' ); ?></td>
-							</tr>
-							<tr >
-								<td class="row-title"><label for="tablecell"><?php esc_attr_e(
-											'Allow users to activate and deactivate via settings page'
-										); ?></label></td>
-								<td><?php esc_attr_e( '0.3', 'halvorson_homepage_takeover' ); ?></td>
-							</tr>
-							<tr class="alternate">
-								<td class="row-title"><label for="tablecell"><?php esc_attr_e(
-											'Add feedback form', 'halvorson_homepage_takeover'
-										); ?></label></td>
-								<td><?php esc_attr_e( '0.4', 'halvorson_homepage_takeover' ); ?></td>
-							</tr>
-
-						</table>
 
 					</div>
 					<!-- .meta-box-sortables .ui-sortable -->
@@ -149,11 +194,7 @@ function halvorson_homepage_takeover_settings_page() { ?>
 
 							<div class="inside">
 								<p><?php esc_attr_e(
-										'This plugin has been developed for Scottish Golf by Halvorson Digital. We look to open source this plugin in the future so your feedback would be greatly appreciated.',
-										'halvorson_homepage_takeover'
-									); ?></p>
-								<p><?php esc_attr_e(
-										'Please do note that this plugin is in BETA. Do not use beyond Scottish Golf.',
+										'Please do note that this plugin is in BETA. Any feedback would be greatly appreciated.',
 										'halvorson_homepage_takeover'
 									); ?></p>
 								<p><?php esc_attr_e(
@@ -188,4 +229,8 @@ add_action( 'admin_init', 'halvorson_homepage_takeover_settings');
 function halvorson_homepage_takeover_settings() {
 	register_setting( 'halvorson-homepage-takeover-settings-group', 'modal_url' );
 	register_setting( 'halvorson-homepage-takeover-settings-group', 'modal_image' );
+	register_setting( 'halvorson-homepage-takeover-settings-group', 'open_in_new_tab' );
+	register_setting( 'halvorson-homepage-takeover-settings-group', 'deactivate_homepage_takeover' );
+	register_setting( 'halvorson-homepage-takeover-settings-group', 'deactivate_cookies' );
+
 }

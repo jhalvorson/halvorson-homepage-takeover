@@ -1,11 +1,11 @@
 (function($) {
-    $(window).load(function(){
-        setTimeout(function(){
-            $(".takeover-modal").modal({
-                fadeDuration: 100
-            });
-        }, 3000);
-    });
+    // $(window).load(function(){
+    //     setTimeout(function(){
+    //         $(".takeover-modal").modal({
+    //             fadeDuration: 100
+    //         });
+    //     }, 3000);
+    // });
 
     // $(document).ready(function() {
     //     if (Cookies.get('modal_shown') == null) {
