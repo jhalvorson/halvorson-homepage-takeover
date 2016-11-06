@@ -4,7 +4,7 @@
 Plugin Name: Homepage Takeover
 Plugin URI: http://halvorson.co.uk/plugins
 Description: Display a simple modal popup on your homepage
-Version: 0.1
+Version: 0.2
 Author: Jamie Halvorson
 Author URI: http://halvorson.co.uk
 License: GPL2
@@ -112,7 +112,10 @@ function halvorson_homepage_takeover_settings_page() { ?>
 										</tr>
 
 										<tr valign="top">
-											<th scope="row">Modal Background Image</th>
+											<th scope="row">Modal Background Image
+											<br>
+											<p class="description"><?php esc_attr_e('690px x 690px image.', 'halvorson_homepage_takeover');?></p>
+											</th>
 											<td><input type="text" name="modal_image" class="regular-text" value="<?php echo esc_attr( get_option('modal_image') ); ?>" /></td>
 										</tr>
 
