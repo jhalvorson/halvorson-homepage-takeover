@@ -23,6 +23,8 @@ add_action('wp_head', 'halvorson_homepage_takeover');
 function halvorson_homepage_takeover() {
 	if( is_front_page() ) {
 
+		if( !esc_attr( get_option('deactivate_homepage_takeover') ) == '1' ) {
+
 		//Check if we are to open in new tab
 		if(esc_attr( get_option('open_in_new_tab') ) == '1'){
 			$newTab = '_blank';
@@ -41,17 +43,20 @@ function halvorson_homepage_takeover() {
 			 });
 			 </script>';
 		} else {
-			echo '<script type="text/javascript">
-						 jQuery(document).ready(function() {
-					        if (Cookies.get(\'modal_shown\') == null) {
-					             Cookies.set(\'modal_shown\', \'yes\', { expires: 3, path: \'/\' });
-					             setTimeout(function(){
-					                 jQuery(".takeover-modal").modal({
-					                     fadeDuration: 100
-					                 });						             
-					                 }, 3000);
-						         }
-						     });
+			$days = esc_attr( get_option('modal_days') );
+			echo '<script type="text/javascript">';
+			echo 'jQuery(document).ready(function() {';
+			echo  'if (Cookies.get(\'modal_shown\') == null) {';
+			echo 'Cookies.set(\'modal_shown\', \'yes\', { expires:';
+			if( $days ){ echo $days; } else { echo '3'; }
+			echo ', path: \'/\' });
+	             setTimeout(function(){
+	                 jQuery(".takeover-modal").modal({
+	                     fadeDuration: 100
+	                 });
+	                 }, 3000);
+		         }
+		     });
 				</script>';
 		}
 
@@ -63,6 +68,8 @@ function halvorson_homepage_takeover() {
  		    </div>';
 
 		}
+
+	}
 
 	}
 }
@@ -107,6 +114,14 @@ function halvorson_homepage_takeover_settings_page() { ?>
 										<tr valign="top">
 											<th scope="row">Modal Background Image</th>
 											<td><input type="text" name="modal_image" class="regular-text" value="<?php echo esc_attr( get_option('modal_image') ); ?>" /></td>
+										</tr>
+
+										<tr valign="top">
+											<th scope="row">When to display the modal
+											<br>
+											<p class="description"><?php esc_attr_e('For example: if you set it to 3, then the modal will show every 3 days.', 'halvorson_homepage_takeover');?></p>
+											</th>
+											<td><input type="text" placeholder="3" name="modal_days" class="regular-text" value="<?php echo esc_attr( get_option('modal_days') ); ?>" /></td>
 										</tr>
 
 									</table>
@@ -232,5 +247,5 @@ function halvorson_homepage_takeover_settings() {
 	register_setting( 'halvorson-homepage-takeover-settings-group', 'open_in_new_tab' );
 	register_setting( 'halvorson-homepage-takeover-settings-group', 'deactivate_homepage_takeover' );
 	register_setting( 'halvorson-homepage-takeover-settings-group', 'deactivate_cookies' );
-
+	register_setting( 'halvorson-homepage-takeover-settings-group', 'modal_days' );
 }
